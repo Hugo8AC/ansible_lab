@@ -1,0 +1,29 @@
+---
+- name: Mi primera automatización real con Nginx
+  hosts: ubuntu
+  become: true  # Esto nos da permisos de root para instalar cosas
+
+  tasks:
+    - name: Actualizar el cache de paquetes e instalar Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Crear una página web personalizada
+      ansible.builtin.copy:
+        content: "Hola Huglama {{ ansible_hostname }} y tiene {{ ansible_memtotal_mb }} MB de RAM."
+        dest: /var/www/html/index.html
+      notify: Reinicar nginx
+
+    - name: Asegurar que Nginx esté corriendo
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+        
+  handlers:
+    - name: Reinicar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
