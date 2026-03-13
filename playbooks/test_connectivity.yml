@@ -1,0 +1,8 @@
+---
+- name: Mi primer test desde GitHub
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Saludo desde el laboratorio de Hugo
+      debug:
+        msg: "¡Hola! Este Playbook viene directamente de GitHub y está corriendo en mi Mac."
